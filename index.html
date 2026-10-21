@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+
+  <!-- SEKME ADI: Burayı istediğin isimle değiştirebilirsin. -->
+  <title>Özel Alan | Dosya İndirme</title>
+  <!-- SEKME İKONU: favicon.svg dosyasını kendi ikonunla değiştirebilirsin. -->
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <meta name="theme-color" content="#121212">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color: #f8f8f8;
+      background: #121212;
+      --background: #121212;
+      --surface: #202020;
+      --surface-raised: #282828;
+      --border: #454545;
+      --text-muted: #b3b3b3;
+      --green: #1ed760;
+    }
+    * { box-sizing: border-box; }
+    html { min-height: 100%; }
+    body { margin: 0; min-height: 100vh; }
+    button, input { font: inherit; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+
+    /* Giriş ekranı: Spotify'dan ilham alan koyu/yeşil tasarım. */
+    #locked {
+      min-height: 100vh;
+      min-height: 100svh;
+      background: radial-gradient(ellipse 80% 45% at 50% 0%, rgba(39, 107, 62, .26), transparent 78%),
+                  linear-gradient(180deg, #202020 0%, #121212 44%, #101010 100%);
+    }
+    .site-header {
+      min-height: 78px;
+      background: rgba(10, 10, 10, .93);
+      border-bottom: 1px solid #202020;
+      padding: 16px clamp(22px, 5vw, 70px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; min-width: 0; text-decoration: none; color: #fff; }
+    .brand img { width: 38px; height: 38px; border-radius: 12px; display: block; }
+    .brand-name { font-size: 21px; letter-spacing: -.035em; font-weight: 800; white-space: nowrap; }
+    .header-note { font-size: 11px; font-weight: 800; letter-spacing: .13em; color: #9a9a9a; }
+    .login-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(36px, 7vh, 90px) 20px 38px;
+    }
+    .login-card {
+      width: min(100%, 510px);
+      padding: clamp(30px, 6vw, 58px);
+      border-radius: 24px;
+      background: linear-gradient(160deg, #252525 0%, #1b1b1b 72%);
+      border: 1px solid #373737;
+      box-shadow: 0 25px 75px rgba(0, 0, 0, .33);
+    }
+    .center-intro { text-align: center; }
+    .lock-emblem {
+      margin: 0 auto 24px;
+      width: 66px; height: 66px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: rgba(30, 215, 96, .12);
+      border: 1px solid rgba(30, 215, 96, .27);
+      color: var(--green);
+    }
+    .lock-emblem svg { width: 28px; height: 28px; }
+    .eyebrow { margin: 0 0 12px; color: var(--green); font-size: 12px; font-weight: 800; letter-spacing: .18em; }
+    h1 { font-size: clamp(29px, 5vw, 39px); line-height: 1.14; letter-spacing: -.055em; margin: 0 0 15px; font-weight: 850; }
+    .subtitle { color: var(--text-muted); font-size: 14px; line-height: 1.65; margin: 0 auto; max-width: 330px; }
+    .divider { height: 1px; width: 100%; background: #393939; margin: 31px 0 29px; }
+    label { font-size: 13px; font-weight: 740; display: block; margin-bottom: 11px; color: #fff; }
+    .input-row {
+      border: 1px solid #777; border-radius: 7px;
+      display: flex; align-items: center; background: #121212;
+      transition: border-color .16s, box-shadow .16s;
+    }
+    .input-row:hover { border-color: #fff; }
+    .input-row:focus-within { border-color: #fff; box-shadow: 0 0 0 2px #fff; }
+    #password { min-width: 0; flex: 1; width: 100%; padding: 15px 16px; background: transparent; color: #fff; border: 0; outline: none; font-size: 15px; }
+    #password::placeholder { color: #888; }
+    .eye { color: #b3b3b3; background: transparent; border: 0; padding: 13px 15px; font-size: 12px; font-weight: 720; cursor: pointer; }
+    .eye:hover { color: #fff; }
+    .eye:focus-visible { outline: 2px solid var(--green); outline-offset: -3px; border-radius: 5px; }
+    .primary {
+      margin-top: 23px; width: 100%; min-height: 51px;
+      border: 0; border-radius: 999px;
+      background: var(--green); color: #101010;
+      font-size: 15px; font-weight: 800; letter-spacing: .012em;
+      cursor: pointer; transition: background .16s, transform .16s;
+    }
+    .primary:hover { background: #3be477; transform: scale(1.012); }
+    .primary:active { transform: scale(.99); }
+    .primary:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+    .primary:disabled { opacity: .72; cursor: wait; transform: none; }
+    .error { min-height: 20px; margin: 13px 0 0; color: #ff9d9d; font-size: 13px; line-height: 1.5; text-align: center; }
+    .bottom-note { display: flex; align-items: center; justify-content: center; gap: 8px; color: #8e8e8e; font-size: 12px; line-height: 1.5; margin: 22px auto 0; text-align: center; }
+    .bottom-note svg { color: #9c9c9c; flex: none; }
+    .notice {
+      margin-top: 22px; padding: 16px 17px;
+      border: 1px solid #444; border-radius: 12px;
+      background: rgba(255,255,255,.035);
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .notice svg { flex: none; margin-top: 1px; width: 19px; height: 19px; color: #b3b3b3; }
+    .notice strong { display: block; margin-bottom: 5px; font-size: 13px; font-weight: 750; }
+    .notice p { margin: 0; font-size: 12px; line-height: 1.6; color: #b3b3b3; }
+    .leave-link { display: inline-block; color: #1ed760; font-size: 12px; font-weight: 750; margin-top: 9px; text-underline-offset: 3px; }
+    .leave-link:hover { color: #50ed89; }
+    .leave-link:focus-visible { outline: 2px solid var(--green); outline-offset: 4px; border-radius: 3px; }
+    .site-footer { color: #818181; font-size: 12px; text-align: center; padding: 0 20px 28px; }
+
+    #unlocked { min-height: 100vh; min-height: 100svh; background: radial-gradient(ellipse 70% 45% at 50% 0%, rgba(39, 107, 62, .19), transparent 78%), #121212; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; background: #0b0b0b; border-bottom: 1px solid #292929; padding: 12px clamp(18px, 4vw, 48px); }
+    .toolbar strong { font-size: 15px; }
+    .toolbar-brand { display: flex; gap: 11px; align-items: center; }
+    .toolbar-brand img { width: 30px; height: 30px; }
+    .toolbar button { border: 1px solid #777; background: #1e1e1e; color: #fff; border-radius: 999px; padding: 9px 19px; cursor: pointer; font-size: 13px; font-weight: 750; }
+    .toolbar button:hover { border-color: #fff; background: #282828; }
+    .toolbar button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+    .download-wrap { display: flex; justify-content: center; padding: clamp(34px, 7vh, 86px) 20px 40px; }
+    .download-card { width: min(100%, 510px); text-align: center; padding: clamp(30px, 6vw, 58px); border: 1px solid #373737; border-radius: 24px; background: linear-gradient(160deg, #252525 0%, #1b1b1b 72%); box-shadow: 0 25px 75px rgba(0,0,0,.3); }
+    .success-emblem { width: 66px; height: 66px; border-radius: 50%; margin: 0 auto 24px; display: grid; place-items: center; background: rgba(30,215,96,.12); border: 1px solid rgba(30,215,96,.27); color: var(--green); }
+    .success-emblem svg { width: 30px; height: 30px; }
+    .download-card h2 { font-size: clamp(27px, 5vw, 35px); line-height: 1.16; letter-spacing: -.045em; margin: 0 0 14px; }
+    .download-card .primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; margin-top: 27px; }
+    .download-card .primary svg { width: 19px; height: 19px; }
+    .unavailable { width: 100%; margin-top: 12px; min-height: 51px; padding: 12px 18px; border-radius: 999px; background: #303030; border: 1px solid #494949; color: #b3b3b3; font-size: 14px; font-weight: 750; cursor: not-allowed; }
+    .wip-note { margin: 9px 0 0; font-size: 12px; color: var(--text-muted); }
+    .download-card .notice { text-align: left; }
+    .download-feedback { min-height: 20px; margin: 10px 0 0; color: #ffabab; font-size: 13px; }
+
+    @media (max-width: 600px) {
+      .site-header { min-height: 68px; padding: 13px 19px; }
+      .brand img { width: 32px; height: 32px; }
+      .brand-name { font-size: 18px; }
+      .header-note { display: none; }
+      .login-wrap { padding: 34px 16px 24px; }
+      .login-card { padding: 30px 23px 28px; border-radius: 17px; }
+      .divider { margin: 26px 0; }
+      .toolbar { min-height: 65px; }
+      .download-wrap { padding: 34px 16px 24px; }
+      .download-card { padding: 30px 23px 28px; border-radius: 17px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0s !important; }
+    }
+  </style>
+</head>
+<body>
+  <main id="locked">
+    <header class="site-header">
+      <!-- BURADAKİ Özel Alan yazısı, giriş sayfasının sol üstünde görünen isim. -->
+      <div class="brand"><img src="./favicon.svg" alt=""><span class="brand-name">Özel Alan</span></div>
+      <div class="header-note">PRIVATE ACCESS</div>
+    </header>
+    <div class="login-wrap">
+      <section class="login-card" aria-labelledby="heading">
+        <div class="center-intro">
+          <div class="lock-emblem" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg>
+          </div>
+          <div class="eyebrow">ÖZEL ERİŞİM</div>
+          <h1 id="heading">Sana özel alana<br>hoş geldin.</h1>
+          <p class="subtitle">Korunan HTML dosyasını indirmek için erişim şifreni gir.</p>
+        </div>
+        <div class="divider" aria-hidden="true"></div>
+        <form id="loginForm">
+          <label for="password">Erişim şifresi</label>
+          <div class="input-row">
+            <input id="password" type="password" placeholder="Şifreni gir" autocomplete="current-password" required autofocus spellcheck="false">
+            <button class="eye" id="toggle" type="button" aria-label="Şifreyi göster">Göster</button>
+          </div>
+          <button class="primary" id="submit" type="submit">Şifreyi doğrula</button>
+          <div id="feedback" class="error" role="status" aria-live="polite"></div>
+        </form>
+        <div class="bottom-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          İçerik, şifrenle yalnızca bu tarayıcıda çözülür.
+        </div>
+        <aside class="notice" aria-label="Kişisel kullanım uyarısı">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg>
+          <div>
+            <strong>Kişisel kullanım uyarısı</strong>
+            <p>Burası kişisel kullanıma özel bir proje alanıdır. Bu sayfaya yanlışlıkla ulaştıysanız lütfen ayrılın.</p>
+            <a class="leave-link" href="about:blank">Siteden ayrıl ↗</a>
+          </div>
+        </aside>
+      </section>
+    </div>
+    <footer class="site-footer">Özel içerik · Güvenli şifreleme</footer>
+  </main>
+
+  <main id="unlocked" hidden>
+    <header class="toolbar">
+      <div class="toolbar-brand"><img src="./favicon.svg" alt=""><strong>Özel Alan</strong></div>
+      <button id="lockButton" type="button">Kilitle</button>
+    </header>
+    <div class="download-wrap">
+      <section class="download-card" aria-labelledby="downloadHeading">
+        <div class="success-emblem" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
+        </div>
+        <div class="eyebrow">ERİŞİM ONAYLANDI</div>
+        <h2 id="downloadHeading">Dosyan hazır.</h2>
+        <p class="subtitle">HTML dosyası şifrenle çözüldü. İndirdiğin dosyayı bilgisayarında saklayabilirsin.</p>
+        <button class="primary" id="downloadButton" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg>
+          Şifresi çözülmüş dosyayı indir
+        </button>
+        <button class="unavailable" type="button" disabled aria-describedby="wipNote">Sayfayı aç · Geliştirme aşamasında</button>
+        <p id="wipNote" class="wip-note">Site içi görüntüleme henüz kullanılabilir değil.</p>
+        <p class="download-feedback" id="downloadFeedback" role="status" aria-live="polite"></p>
+        <aside class="notice" aria-label="Kişisel kullanım uyarısı">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/></svg>
+          <div>
+            <strong>Kişisel kullanım uyarısı</strong>
+            <p>Bu proje kişisel kullanım içindir. Yanlışlıkla buraya ulaştıysanız lütfen sayfadan ayrılın.</p>
+            <a class="leave-link" href="about:blank">Siteden ayrıl ↗</a>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </main>
+
+  <!-- ŞİFRE ÇÖZME: Kriptografi kodu önceki sürümle aynı; burada gerçek şifre yok. -->
+  <script>
+    "use strict";
+    const loginForm = document.getElementById("loginForm");
+    const passwordInput = document.getElementById("password");
+    const submitButton = document.getElementById("submit");
+    const feedback = document.getElementById("feedback");
+    const downloadFeedback = document.getElementById("downloadFeedback");
+    // Yalnızca doğru şifre girildikten sonra tarayıcı belleğinde bulunur; sayfa içinde çalıştırılmaz.
+    let decryptedHtml = null;
+
+    function fromBase64(str) {
+      const binary = atob(str);
+      return Uint8Array.from(binary, char => char.charCodeAt(0));
+    }
+
+    async function decryptSite(password, payload) {
+      if (payload.version !== 1 || payload.kdf !== "PBKDF2-SHA256" ||
+          payload.cipher !== "AES-256-GCM" || payload.iterations !== 600000) {
+        throw new Error("FORMAT_ERROR");
+      }
+      const rawKey = await crypto.subtle.importKey(
+        "raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"]
+      );
+      const derivedKey = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", salt: fromBase64(payload.salt), iterations: payload.iterations, hash: "SHA-256" },
+        rawKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
+      );
+      const plaintext = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: fromBase64(payload.iv), tagLength: 128 },
+        derivedKey, fromBase64(payload.ciphertext)
+      );
+      return new TextDecoder("utf-8", { fatal: true }).decode(plaintext);
+    }
+
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!passwordInput.value) return;
+      feedback.textContent = "";
+      submitButton.disabled = true;
+      submitButton.textContent = "Şifre doğrulanıyor…";
+      try {
+        if (!globalThis.crypto?.subtle) throw new Error("NO_CRYPTO");
+        const response = await fetch("./content.enc", { cache: "no-store" });
+        if (!response.ok) throw new Error("MISSING_FILE");
+        const payload = await response.json();
+        decryptedHtml = await decryptSite(passwordInput.value, payload);
+        passwordInput.value = "";
+        document.getElementById("locked").hidden = true;
+        document.getElementById("unlocked").hidden = false;
+        document.getElementById("downloadButton").focus();
+      } catch (err) {
+        if (err.message === "NO_CRYPTO") {
+          feedback.textContent = "Bu tarayıcıda güvenli şifreleme kullanılamıyor. HTTPS ile açtığından emin ol.";
+        } else if (err.message === "MISSING_FILE" || err instanceof SyntaxError || err.message === "FORMAT_ERROR") {
+          feedback.textContent = "Şifreli dosya bulunamadı veya geçersiz. content.enc dosyasını kontrol et.";
+        } else {
+          feedback.textContent = "Şifre yanlış veya şifreli veri bozulmuş.";
+        }
+        passwordInput.focus();
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Şifreyi doğrula";
+      }
+    });
+
+    document.getElementById("toggle").addEventListener("click", () => {
+      const showing = passwordInput.type === "password";
+      passwordInput.type = showing ? "text" : "password";
+      document.getElementById("toggle").textContent = showing ? "Gizle" : "Göster";
+      document.getElementById("toggle").setAttribute("aria-label", showing ? "Şifreyi gizle" : "Şifreyi göster");
+    });
+    document.getElementById("downloadButton").addEventListener("click", () => {
+      downloadFeedback.textContent = "";
+      if (decryptedHtml === null) {
+        downloadFeedback.textContent = "Dosya artık bellekte değil. Yeniden giriş yapın.";
+        return;
+      }
+      let url = null;
+      try {
+        const blob = new Blob([decryptedHtml], { type: "text/html;charset=utf-8" });
+        url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "sifresi-cozulmus-sayfa.html";
+        document.body.append(link);
+        link.click();
+        link.remove();
+        // Tarayıcının indirmeyi başlatabilmesi için URL'yi hemen iptal etmiyoruz.
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      } catch (error) {
+        if (url) URL.revokeObjectURL(url);
+        downloadFeedback.textContent = "İndirme başlatılamadı. Lütfen yeniden deneyin.";
+      }
+    });
+    document.getElementById("lockButton").addEventListener("click", () => {
+      decryptedHtml = null;
+      passwordInput.value = "";
+      downloadFeedback.textContent = "";
+      feedback.textContent = "";
+      document.getElementById("unlocked").hidden = true;
+      document.getElementById("locked").hidden = false;
+      passwordInput.focus();
+    });
+  </script>
+</body>
+</html>
